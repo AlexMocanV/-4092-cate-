@@ -1,0 +1,88 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+ifstream fin("cate.in");
+ofstream fout("cate.out");
+
+int fc[1000001];
+bool ci[1000001];
+void ciur()
+{
+    int i,d;
+    ci[0]=ci[1]=1;
+    for(i=2;i*i<=1000000;i++)
+    {
+        if(ci[i]==0)
+        {
+            for(d=2*i;d<=1000000;d+=i)
+            {
+                ci[d]=1;
+            }
+        }
+    }
+    for(i=1;i<=1000;i++)
+    {
+        if(ci[i]==0)
+        {
+            d=i*i;
+            fc[d]=1;
+        }
+    }
+    for(i=1;i<=1000000;i++)
+    {
+        fc[i]+=fc[i-1];
+    }
+}
+
+void patrat()
+{
+    int i;
+    for(i=1;i<=1000;i++)
+    {
+        fc[i*i]=1;
+    }
+    for(i=1;i<=1000000;i++)
+    {
+        fc[i]+=fc[i-1];
+    }
+}
+
+
+int main()
+{
+    int n,c,a,b,nr=0,i,j;
+    fin>>c>>n;
+    if(c==1)
+    {
+        patrat();
+        for(i=0;i<n;i++)
+        {
+            fin>>a>>b;
+            if(a>b)
+            {
+                swap(a,b);
+            }
+            nr=0;
+            fout<<fc[b]-fc[a-1]<<"\n";
+        }
+    }
+    else
+    {
+        ciur();
+        for(i=0;i<n;i++)
+        {
+            fin>>a>>b;
+            if(a>b)
+            {
+                swap(a,b);
+            }
+            fout<<fc[b]-fc[a-1]<<"\n";
+        }
+
+    }
+
+
+    return 0;
+}
